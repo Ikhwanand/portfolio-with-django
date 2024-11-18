@@ -1,0 +1,263 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ about.headline }} - Portfolio{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary/10 z-0"></div>
+    
+    <!-- Animated Background -->
+    <div class="absolute inset-0 z-0">
+        <div class="relative w-full h-full">
+            <div class="absolute top-10 left-10 w-72 h-72 bg-primary/20 rounded-full mix-blend-multiply filter blur-xl animate-blob"></div>
+            <div class="absolute top-0 right-0 w-72 h-72 bg-secondary/20 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
+            <div class="absolute -bottom-8 left-20 w-72 h-72 bg-accent/20 rounded-full mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>
+        </div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="container mx-auto px-4 z-10">
+        <div class="flex flex-col md:flex-row items-center gap-8">
+            {% if about.profile_image %}
+            <div class="w-48 h-48 md:w-64 md:h-64 relative rombo-fade-in rombo-delay-300">
+                <img src="{{ about.profile_image.url }}" alt="Profile" 
+                     class="w-full h-full object-cover rounded-2xl shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                <div class="absolute inset-0 rounded-2xl bg-gradient-to-tr from-primary/20 to-transparent"></div>
+            </div>
+            {% endif %}
+            
+            <div class="text-center md:text-left">
+                <h1 class="typing-text text-4xl md:text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                    {{ about.headline }}
+                </h1>
+                <p class="text-lg md:text-xl text-base-content/80 mb-6 max-w-2xl rombo-slide-up rombo-delay-300">
+                    {{ about.bio }}
+                </p>
+                <div class="flex gap-4 justify-center md:justify-start rombo-slide-up rombo-delay-600">
+                    {% if about.resume %}
+                    <a href="{{ about.resume.url }}" class="btn btn-primary rombo-hover-float">Download Resume</a>
+                    {% endif %}
+                    <a href="#contact" class="btn btn-outline btn-secondary rombo-hover-float">Contact Me</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" class="py-20 relative">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 rombo-slide-up">Skills & Expertise</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for skill in skills %}
+            <div class="p-6 rounded-xl bg-base-200/50 backdrop-blur-sm hover:bg-base-200 transition-all duration-300 group rombo-fade-in rombo-delay-{{ forloop.counter|add:'2' }}00">
+                <div class="text-center">
+                    <i class="{{ skill.icon }} text-3xl mb-3 text-primary group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold mb-2">{{ skill.name }}</h3>
+                    <div class="w-full bg-base-300 rounded-full h-2.5 overflow-hidden">
+                        <div class="bg-primary h-2.5 rounded-full transition-all duration-1000 ease-out rombo-width-animate"
+                             style="width: 0%"
+                             data-width="{{ skill.proficiency }}"></div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="py-20 relative">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 rombo-slide-up">Featured Projects</h2>
+        
+        <!-- Project Filters -->
+        <div class="flex justify-center gap-4 mb-8 rombo-fade-in">
+            <button class="btn btn-sm project-filter-btn btn-active" data-filter="all">All</button>
+            <button class="btn btn-sm project-filter-btn" data-filter="web">Web</button>
+            <button class="btn btn-sm project-filter-btn" data-filter="mobile">Mobile</button>
+            <button class="btn btn-sm project-filter-btn" data-filter="design">Design</button>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for project in projects %}
+            <article class="project-item group rombo-fade-in rombo-delay-{{ forloop.counter|add:'2' }}00" 
+                     data-categories="{{ project.technologies|lower }}">
+                <div class="relative overflow-hidden rounded-xl aspect-video rombo-hover-tilt">
+                    <img src="{{ project.image.url }}" alt="{{ project.title }}" 
+                         class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-base-100 to-transparent opacity-0 group-hover:opacity-90 transition-opacity duration-300">
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <h3 class="text-xl font-bold mb-2">{{ project.title }}</h3>
+                            <p class="text-sm text-base-content/80 mb-4">{{ project.description|truncatewords:20 }}</p>
+                            <div class="flex gap-4">
+                                {% if project.project_url %}
+                                <a href="{{ project.project_url }}" class="btn btn-primary btn-sm rombo-hover-float">View Project</a>
+                                {% endif %}
+                                {% if project.github_url %}
+                                <a href="{{ project.github_url }}" class="btn btn-outline btn-sm rombo-hover-float">GitHub</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Experience Section -->
+<section id="experience" class="py-20 relative">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 rombo-slide-up">Work Experience</h2>
+        <div class="max-w-3xl mx-auto">
+            {% for experience in experiences %}
+            <div class="mb-8 relative rombo-fade-in rombo-delay-{{ forloop.counter|add:'2' }}00">
+                {% if not forloop.last %}
+                <div class="absolute left-0 top-0 bottom-0 w-px bg-primary/20"></div>
+                {% endif %}
+                
+                <div class="ml-8 relative">
+                    <div class="absolute -left-10 top-2 w-4 h-4 rounded-full bg-primary rombo-pulse"></div>
+                    
+                    <div class="bg-base-200/50 backdrop-blur-sm p-6 rounded-xl hover:bg-base-200 transition-all duration-300 rombo-hover-float">
+                        <h3 class="text-xl font-bold mb-1">{{ experience.position }}</h3>
+                        <div class="text-base-content/70 mb-2">
+                            <a href="{{ experience.company_url }}" class="hover:text-primary">{{ experience.company }}</a>
+                            <span class="mx-2">•</span>
+                            <span>{{ experience.start_date|date:"M Y" }} - 
+                                {% if experience.is_current %}Present{% else %}{{ experience.end_date|date:"M Y" }}{% endif %}
+                            </span>
+                        </div>
+                        <p class="text-base-content/80">{{ experience.description }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="py-20 relative">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 rombo-slide-up">Get In Touch</h2>
+        <div class="max-w-2xl mx-auto">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-error{% endif %} mb-6 rombo-fade-in">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            
+            <form id="contactForm" method="post" class="space-y-6 rombo-fade-in rombo-delay-300">
+                {% csrf_token %}
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Name</span>
+                        </label>
+                        <input type="text" name="name" class="input input-bordered w-full" required>
+                    </div>
+                    <div class="form-control w-full">
+                        <label class="label">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input type="email" name="email" class="input input-bordered w-full" required>
+                    </div>
+                </div>
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Subject</span>
+                    </label>
+                    <input type="text" name="subject" class="input input-bordered w-full" required>
+                </div>
+                <div class="form-control w-full">
+                    <label class="label">
+                        <span class="label-text">Message</span>
+                    </label>
+                    <textarea name="message" class="textarea textarea-bordered h-32" required></textarea>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary rombo-hover-float">Send Message</button>
+                </div>
+            </form>
+
+            <div class="mt-12 text-center">
+                <p class="text-lg mb-8">{{ about.email }}</p>
+                <div class="flex justify-center gap-6">
+                    {% if about.github_url %}
+                    <a href="{{ about.github_url }}" class="btn btn-circle btn-outline rombo-hover-float">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    {% endif %}
+                    {% if about.linkedin_url %}
+                    <a href="{{ about.linkedin_url }}" class="btn btn-circle btn-outline rombo-hover-float">
+                        <i class="fab fa-linkedin-in text-xl"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom styles for animations -->
+<style>
+    @keyframes blob {
+        0% { transform: translate(0px, 0px) scale(1); }
+        33% { transform: translate(30px, -50px) scale(1.1); }
+        66% { transform: translate(-20px, 20px) scale(0.9); }
+        100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob {
+        animation: blob 7s infinite;
+    }
+    .animation-delay-2000 {
+        animation-delay: 2s;
+    }
+    .animation-delay-4000 {
+        animation-delay: 4s;
+    }
+    
+    /* Custom pulse animation */
+    @keyframes custom-pulse {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(var(--primary), 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(var(--primary), 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(var(--primary), 0); }
+    }
+    .rombo-pulse {
+        animation: custom-pulse 2s infinite;
+    }
+</style>
+
+<!-- Animation script -->
+<script>
+    // Intersection Observer for skill bars animation
+    document.addEventListener('DOMContentLoaded', function() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target;
+                    const width = bar.dataset.width;
+                    setTimeout(() => {
+                        bar.style.width = `${width}%`;
+                    }, 200);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('.rombo-width-animate').forEach(bar => {
+            observer.observe(bar);
+        });
+    });
+</script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'scripts/main.js' %}"></script>
+{% endblock %}
